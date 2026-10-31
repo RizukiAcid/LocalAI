@@ -112,11 +112,14 @@ class ModelServiceImplementation extends ModelService {
     final fullRaw = '<think>\n$thinkingText\n</think>\n$responseText';
     final random = Random();
 
-    // Stream token by token with realistic latency
-    for (int i = 0; i < fullRaw.length; i += random.nextInt(3) + 1) {
+    // Stream token by token with realistic latency and synchronized step size
+    int i = 0;
+    while (i < fullRaw.length) {
       if (_isAborted) break;
-      final end = min(i + random.nextInt(3) + 1, fullRaw.length);
-      onToken(fullRaw.substring(i, end));
+      final step = min(random.nextInt(3) + 1, fullRaw.length - i);
+      final token = fullRaw.substring(i, i + step);
+      i += step;
+      onToken(token);
       await Future.delayed(Duration(milliseconds: random.nextInt(15) + 8));
     }
 
