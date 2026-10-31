@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/chat_message.dart';
 import '../services/model_service.dart';
+import '../widgets/formatted_text.dart';
 
 /// Main conversation screen providing modern chat UI, real-time streaming,
 /// model status visualization, and chain-of-thought controls.
@@ -605,13 +606,10 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
                           ],
                         ),
                       ] else ...[
-                        SelectableText(
-                          message.content,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                            height: 1.45,
-                          ),
+                        FormattedMessageView(
+                          content: message.content,
+                          isUser: isUser,
+                          onCopyCode: _copyToClipboard,
                         ),
                       ],
                     ],
